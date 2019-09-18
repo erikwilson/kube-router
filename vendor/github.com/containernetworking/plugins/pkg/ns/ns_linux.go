@@ -1,4 +1,4 @@
-// Copyright 2015 CNI authors
+// Copyright 2015-2017 CNI authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,46 @@ import (
 	"runtime"
 	"sync"
 	"syscall"
+
+	"golang.org/x/sys/unix"
 )
+
+// Returns an object representing the current OS thread's network namespace
+func GetCurrentNS() (NetNS, error) {
+	return GetNS(getCurrentThreadNetNSPath())
+}
+
+func getCurrentThreadNetNSPath() string {
+	// /proc/self/ns/net returns the namespace of the main thread, not
+	// of whatever thread this goroutine is running on.  Make sure we
+	// use the thread's net namespace since the thread is switching around
+	return fmt.Sprintf("/proc/%d/task/%d/ns/net", os.Getpid(), unix.Gettid())
+}
+
+func (ns *netNS) Close() error {
+	if err := ns.errorIfClosed(); err != nil {
+		return err
+	}
+
+	if err := ns.file.Close(); err != nil {
+		return fmt.Errorf("Failed to close %q: %v", ns.file.Name(), err)
+	}
+	ns.closed = true
+
+	return nil
+}
+
+func (ns *netNS) Set() error {
+	if err := ns.errorIfClosed(); err != nil {
+		return err
+	}
+
+	if err := unix.Setns(int(ns.Fd()), unix.CLONE_NEWNET); err != nil {
+		return fmt.Errorf("Error switching to ns %v: %v", ns.file.Name(), err)
+	}
+
+	return nil
+}
 
 type NetNS interface {
 	// Executes the passed closure in this object's network namespace,
@@ -53,9 +92,8 @@ type NetNS interface {
 }
 
 type netNS struct {
-	file    *os.File
-	mounted bool
-	closed  bool
+	file   *os.File
+	closed bool
 }
 
 // netNS implements the NetNS interface

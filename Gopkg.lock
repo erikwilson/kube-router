@@ -78,24 +78,33 @@
   revision = "3a771d992973f24aa725d07868b467d1ddfceafb"
 
 [[projects]]
-  digest = "1:23cd6ae7715a846f8f0580e89158b9d15f95b0b2dfeae2d612123ed6df31c47a"
+  digest = "1:1a07bbfee1d0534e8dda4773948e6dcd3a061ea7ab047ce04619476946226483"
   name = "github.com/containernetworking/cni"
   packages = [
     "libcni",
     "pkg/invoke",
-    "pkg/ip",
-    "pkg/ns",
     "pkg/types",
     "pkg/types/020",
     "pkg/types/current",
-    "pkg/utils/hwaddr",
     "pkg/version",
+  ]
+  pruneopts = "UT"
+  revision = "4cfb7b568922a3c79a23e438dc52fe537fc9687e"
+  version = "v0.7.1"
+
+[[projects]]
+  digest = "1:a532f565dbbbf952a9cced4f9d479186e910224f5c7b29c6fce4500aef6d189e"
+  name = "github.com/containernetworking/plugins"
+  packages = [
+    "pkg/ip",
+    "pkg/ns",
+    "pkg/utils/hwaddr",
     "plugins/ipam/host-local/backend",
     "plugins/ipam/host-local/backend/allocator",
   ]
   pruneopts = "UT"
-  revision = "137b4975ecab6e1f0c24c1e3c228a50a3cfba75e"
-  version = "v0.5.2"
+  revision = "485be65581341430f9106a194a98f0f2412245fb"
+  version = "v0.8.2"
 
 [[projects]]
   digest = "1:df4af3a8e15cd72b068b8d898598001935edce4eac4eb5a3d7fd906036123ff4"
@@ -653,6 +662,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:7e65e2f577d27cc6cddeb85b9773b8b0ee510627dcd488bfec47dfe53c1b587f"
+  name = "github.com/safchain/ethtool"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "42ed695e3de80b9d695f280295fd7994639f209d"
+
+[[projects]]
+  branch = "master"
   digest = "1:ff6b0586c0621a76832cf783eee58cbb9d9795d2ce8acbc199a4131db11c42a9"
   name = "github.com/satori/go.uuid"
   packages = ["."]
@@ -1112,7 +1129,7 @@
     "github.com/aws/aws-sdk-go/aws/session",
     "github.com/aws/aws-sdk-go/service/ec2",
     "github.com/containernetworking/cni/libcni",
-    "github.com/containernetworking/cni/plugins/ipam/host-local/backend/allocator",
+    "github.com/containernetworking/plugins/plugins/ipam/host-local/backend/allocator",
     "github.com/coreos/go-iptables/iptables",
     "github.com/docker/docker/client",
     "github.com/docker/libnetwork/ipvs",
